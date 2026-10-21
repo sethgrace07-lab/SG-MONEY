@@ -45,8 +45,6 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: SG-MONEY-APK
-          path: build/app/outputs/flutter-apk/app-release.apk
-:::
 
 ## Étape 2 : Enregistrer le fichier
 
