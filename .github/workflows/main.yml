@@ -1,0 +1,67 @@
+name: Build SG MONEY APK
+
+on:
+  workflow_dispatch:
+  push:
+    branches:
+      - main
+
+permissions:
+  contents: read
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Recuperer le code
+        uses: actions/checkout@v4
+
+      - name: Installer Java
+        uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: '17'
+
+      - name: Installer Flutter
+        uses: subosito/flutter-action@v2
+        with:
+          channel: stable
+          cache: true
+
+      - name: Generer la structure Android
+        run: flutter create --platforms=android --project-name=sg_money .
+
+      - name: Installer les dependances
+        run: flutter pub get
+
+      - name: Analyser le code
+        run: flutter analyze
+
+      - name: Construire l'APK
+        run: flutter build apk --release
+
+      - name: Enregistrer l'APK
+        uses: actions/upload-artifact@v4
+        with:
+          name: SG-MONEY-APK
+          path: build/app/outputs/flutter-apk/app-release.apk
+:::
+
+## Étape 2 : Enregistrer le fichier
+
+1. Appuie sur **Commit changes…**.
+2. Confirme avec **Commit changes**.
+3. Attends que GitHub enregistre le fichier.
+
+Le fichier devrait être enregistré dans :
+
+`.github/workflows/main.yml`
+
+**Important :** ce workflow prépare Android et tente de construire l’APK. Il faudra vérifier si la compilation réussit, car nous devons encore confirmer que tous les fichiers du projet Flutter sont corrects.
+
+### Dis-moi quand c’est fait
+
+Réponds simplement : **« Main.yml enregistré »**.
+
+Ensuite, nous vérifierons le lancement de la compilation.
